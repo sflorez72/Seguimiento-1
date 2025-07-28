@@ -1,0 +1,68 @@
+#Punto 1
+#Columna 1: Seqid -> ID de la secuencia
+	#Ejemplo: NC_045512
+#Columna 2: Source -> Programa de donde se generó la info
+	#Ejemplo: ensembl
+#Columna 3: Type -> Tipo de feature de la línea
+	#Ejemplo: gene
+#Columna 4: Start -> Posición de inicio del feature en la seq
+	#Ejemplo: 2360
+#Columna 5: End -> Posición final del feature
+	#Ejemplo: 2575
+#Columna 6: Score -> Puntuación del feature/ . si no aplica
+	#Ejemplo: 0.85
+#Columna 7:  Strand -> En qué hebra del ADN está el feature
+	#+  hebra directa
+	#-  hebra complementaria
+	#.  no aplica
+#Columna 8: Phase -> Solo para CDS - dónde comienza el primer codón
+	#0 - empieza con el primer nucleótido
+	#1 - codón comienza en la segunda base
+	#2 - codón comienza en la tercera base
+	". - no aplica
+#Columna 9: Attributes -> Información adicional
+
+
+#Punto 2
+#Descargar archivo
+wget ftp.ensembl.org/pub/current_gff3/stegastes_partitus/Stegastes_partitus.Stegastes_partitus-1.0.2.114.gff3.gz
+
+#Descomprimir el archivo
+gunzip Stegastes_partitus.Stegastes_partitus-1.0.2.114.gff3.gz
+
+#Punto 3
+#Crear carpeta de Seguimiento 1
+mkdir Seguimiento_1
+
+#Mover el archivo Stegastes_partitus.Stegastes_partitus-1.0.2.114.gff3.gz a la carpeta
+mv Stegastes_partitus.Stegastes_partitus-1.0.2.114.gff3.gz ./Seguimiento_1
+
+#Ir a la carpeta Seguimiento_1
+cd ./Seguimiento_1
+
+#Crear el archivo de texto plano
+touch comandos.txt
+
+#Para encontrar información del organismo
+bio search "Stegastes partitus"
+
+#¿Cuántas features tiene el archivo?
+cat Stegastes_partitus.Stegastes_partitus-1.0.2.114.gff3 | grep -v "#" | wc -l
+
+#¿Cuántas regiones de la secuencia hay en el archivo?
+cat Stegastes_partitus.Stegastes_partitus-1.0.2.114.gff3 | grep "##sequence-region" | wc -l
+
+#¿Cuántos genes están listados en el organismo?
+cat Stegastes_partitus.Stegastes_partitus-1.0.2.114.gff3 | grep "gene" | wc -l
+
+#¿Cuáles son las primeras 10 features del organismo?
+cat Stegastes_partitus.Stegastes_partitus-1.0.2.114.gff3 | cut -f3 | grep -v "#" | head
+
+
+#¿Cuál es el top 10 de tipo de features (columna 3 más anotados en el genoma?
+cat Stegastes_partitus.Stegastes_partitus-1.0.2.114.gff3 | cut -f3 | grep -v "#" | sort | uniq -c | sort -nr | head
+
+#cut -f3 -> Muestra solo la columna 3
+#grep -v -> Quita todos las entradas que empiece con #
+#sort -> Ordena la lista de manera alfabética
+#uniq -c -> Cuenta cuántas veces aparece cada tipo - deben de estar ya ordenada
